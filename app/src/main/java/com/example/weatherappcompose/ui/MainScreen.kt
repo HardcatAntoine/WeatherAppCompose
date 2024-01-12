@@ -3,9 +3,12 @@ package com.example.weatherappcompose.ui
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -16,6 +19,7 @@ import androidx.compose.material.TabRow
 import androidx.compose.material.TabRowDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.weatherappcompose.R
+import com.example.weatherappcompose.data.WeatherData
 import com.example.weatherappcompose.ui.theme.BlueLight
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -124,7 +129,7 @@ fun MainCard() {
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun TabLayout() {
+fun TabLayout(daysList: MutableState<List<WeatherData>>) {
     val tabList = listOf("HOURS", "DAYS")
     val pagerState = rememberPagerState()
     val tabIndex = pagerState.currentPage
@@ -136,11 +141,12 @@ fun TabLayout() {
     ) {
         TabRow(
             selectedTabIndex = tabIndex,
-            indicator = { tabPosition->
+            indicator = { tabPosition ->
                 TabRowDefaults.Indicator(
                     Modifier.pagerTabIndicatorOffset(
-                        pagerState ,
-                        tabPosition )
+                        pagerState,
+                        tabPosition
+                    )
                 )
             },
             backgroundColor = BlueLight,
@@ -162,6 +168,16 @@ fun TabLayout() {
         count = tabList.size,
         state = pagerState,
     ) { index ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            itemsIndexed(
+                daysList.value
+            ) { _, item ->
+                ListItem(item = item)
+            }
 
+        }
     }
 }
