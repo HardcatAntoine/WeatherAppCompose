@@ -28,8 +28,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.weatherappcompose.R
-import com.example.weatherappcompose.data.model.WeatherData
 import com.example.weatherappcompose.data.model.Hour
+import com.example.weatherappcompose.data.model.WeatherUIModel
 import com.example.weatherappcompose.ui.theme.BlueLight
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -39,7 +39,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun MainCard(
-    currentDay: MutableState<WeatherData>,
+    currentDay: MutableState<WeatherUIModel>,
     onClickSync: () -> Unit,
     onClickSearch: () -> Unit
 ) {
@@ -148,7 +148,7 @@ fun MainCard(
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun TabLayout(daysList: MutableState<List<WeatherData>>, currentDay: MutableState<WeatherData>) {
+fun TabLayout(daysList: MutableState<List<WeatherUIModel>>, currentDay: MutableState<WeatherUIModel>) {
     val tabList = listOf("HOURS", "DAYS")
     val pagerState = rememberPagerState()
     val tabIndex = pagerState.currentPage
@@ -199,12 +199,12 @@ fun TabLayout(daysList: MutableState<List<WeatherData>>, currentDay: MutableStat
     }
 }
 
-private fun getWeatherByHours(hours: List<Hour>): List<WeatherData> {
+private fun getWeatherByHours(hours: List<Hour>): List<WeatherUIModel> {
     if (hours.isEmpty()) return listOf()
-    val list = ArrayList<WeatherData>()
+    val list = ArrayList<WeatherUIModel>()
     for (element in hours) {
         list.add(
-            WeatherData(
+            WeatherUIModel(
                 city = "",
                 time = element.time,
                 currentTemp = element.temp_c.toFloat().toInt().toString() + "°C",

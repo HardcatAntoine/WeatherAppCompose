@@ -27,11 +27,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.example.weatherappcompose.data.model.WeatherData
+import com.example.weatherappcompose.data.model.WeatherUIModel
 import com.example.weatherappcompose.ui.theme.BlueLight
 
 @Composable
-fun MainList(list: List<WeatherData>, currentDay: MutableState<WeatherData>) {
+fun MainList(list: List<WeatherUIModel>, currentDay: MutableState<WeatherUIModel>) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -46,7 +46,7 @@ fun MainList(list: List<WeatherData>, currentDay: MutableState<WeatherData>) {
 }
 
 @Composable
-fun ListItem(item: WeatherData, currentDay: MutableState<WeatherData>) {
+fun ListItem(item: WeatherUIModel, currentDay: MutableState<WeatherUIModel>) {
     Card(
         modifier = Modifier
             .fillMaxWidth()

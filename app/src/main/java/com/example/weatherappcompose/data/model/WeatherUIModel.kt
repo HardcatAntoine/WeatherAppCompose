@@ -1,8 +1,6 @@
 package com.example.weatherappcompose.data.model
 
-import com.example.weatherappcompose.data.model.Hour
-
-data class WeatherData(
+data class WeatherUIModel(
     val city: String,
     val time: String,
     val currentTemp: String,
