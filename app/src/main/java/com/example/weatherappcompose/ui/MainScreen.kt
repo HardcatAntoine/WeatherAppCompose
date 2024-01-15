@@ -28,15 +28,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.weatherappcompose.R
-import com.example.weatherappcompose.data.WeatherData
+import com.example.weatherappcompose.data.model.WeatherData
+import com.example.weatherappcompose.data.model.Hour
 import com.example.weatherappcompose.ui.theme.BlueLight
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
-import org.json.JSONArray
-import org.json.JSONObject
 
 @Composable
 fun MainCard(
@@ -91,8 +90,12 @@ fun MainCard(
                     text = if (currentDay.value.currentTemp.isNotEmpty()) {
                         "${currentDay.value.currentTemp.toFloat().toInt()}°C"
                     } else {
-                        "${currentDay.value.maxTemp.toFloat().toInt()}°C/" +
-                                "${currentDay.value.minTemp.toFloat().toInt()}°C"
+                        if (currentDay.value.maxTemp.isNotEmpty() && currentDay.value.minTemp.isNotEmpty()) {
+                            "${currentDay.value.maxTemp.toFloat().toInt()}°C/" +
+                                    "${currentDay.value.minTemp.toFloat().toInt()}°C"
+                        } else {
+                            ""
+                        }
                     },
 
                     style = TextStyle(fontSize = 65.sp),
@@ -119,9 +122,12 @@ fun MainCard(
                         )
                     }
                     Text(
-                        text = "${
-                            currentDay.value.maxTemp.toFloat().toInt()
-                        }°C/${currentDay.value.minTemp.toFloat().toInt()}°C",
+                        text = if (currentDay.value.maxTemp.isNotEmpty() && currentDay.value.minTemp.isNotEmpty()) {
+                            "${currentDay.value.maxTemp.toFloat().toInt()}°C/" +
+                                    "${currentDay.value.minTemp.toFloat().toInt()}°C"
+                        } else {
+                            ""
+                        },
                         style = TextStyle(fontSize = 16.sp),
                         color = Color.White
                     )
@@ -193,20 +199,18 @@ fun TabLayout(daysList: MutableState<List<WeatherData>>, currentDay: MutableStat
     }
 }
 
-private fun getWeatherByHours(hours: String): List<WeatherData> {
+private fun getWeatherByHours(hours: List<Hour>): List<WeatherData> {
     if (hours.isEmpty()) return listOf()
-    val hoursArray = JSONArray(hours)
     val list = ArrayList<WeatherData>()
-    for (i in 0 until hoursArray.length()) {
-        val item = hoursArray[i] as JSONObject
+    for (element in hours) {
         list.add(
             WeatherData(
                 city = "",
-                time = item.getString("time"),
-                currentTemp = item.getString("temp_c").toFloat().toInt().toString() + "°C",
-                condition = item.getJSONObject("condition").getString("text"),
-                icon = item.getJSONObject("condition").getString("icon"),
-                "", "", ""
+                time = element.time,
+                currentTemp = element.temp_c.toFloat().toInt().toString() + "°C",
+                condition = element.condition.text,
+                icon = element.condition.icon,
+                "", "", listOf()
             )
         )
     }

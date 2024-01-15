@@ -1,4 +1,6 @@
-package com.example.weatherappcompose.data
+package com.example.weatherappcompose.data.model
+
+import com.example.weatherappcompose.data.model.Hour
 
 data class WeatherData(
     val city: String,
@@ -8,5 +10,5 @@ data class WeatherData(
     val icon: String,
     val maxTemp: String,
     val minTemp: String,
-    val hours: String
+    val hours: List<Hour>
 )
